@@ -81,28 +81,53 @@ namespace RemoteTaskManager_for_WPF
             System.IO.MemoryStream ms = new System.IO.MemoryStream();
             byte[] resBytes = new byte[256];
             int resSize = 0;
+            bool data_ava = false;
 
-            if (ns.DataAvailable)
+            if (ns != null)
             {
-
-                do
+                
+                try
                 {
-                    //データの一部を受信する
-                    resSize = ns.Read(resBytes, 0, resBytes.Length);
+                    data_ava = ns.DataAvailable;
+                }catch(System.ObjectDisposedException)
+                {
+                    return "0";
+                }
+                
 
-                    //受信したデータを蓄積する
-                    ms.Write(resBytes, 0, resSize);
+                //data_ava = ns.DataAvailable;
 
-                    // 受信を続ける
-                } while (ns.DataAvailable || resBytes[resSize - 1] != '\n');
+                if (data_ava)
+                {
 
-                //受信したデータを文字列に変換
-                string resMsg = enc.GetString(ms.GetBuffer(), 0, (int)ms.Length);
-                ms.Close();
-                //末尾の\nを削除
-                resMsg = resMsg.TrimEnd('\n');
+                    do
+                    {
+                        //データの一部を受信する
+                        try {
+                            resSize = ns.Read(resBytes, 0, resBytes.Length);
+                        }catch(System.IO.IOException)
+                        {
+                            return "0";
+                        }
 
-                return resMsg;
+                        //受信したデータを蓄積する
+                        ms.Write(resBytes, 0, resSize);
+
+                        // 受信を続ける
+                    } while (ns.DataAvailable || resBytes[resSize - 1] != '\n');
+
+                    //受信したデータを文字列に変換
+                    string resMsg = enc.GetString(ms.GetBuffer(), 0, (int)ms.Length);
+                    ms.Close();
+                    //末尾の\nを削除
+                    resMsg = resMsg.TrimEnd('\n');
+
+                    return resMsg;
+                }
+                else
+                {
+                    return "0";
+                }
             }
             else
             {

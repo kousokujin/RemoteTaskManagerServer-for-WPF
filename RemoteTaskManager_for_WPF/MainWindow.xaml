@@ -11,7 +11,7 @@
         <WindowChrome CaptionHeight="{x:Static SystemParameters.CaptionHeight}"
                       ResizeBorderThickness="{x:Static SystemParameters.WindowResizeBorderThickness}" />
     </WindowChrome.WindowChrome>
-
+    
     <Grid>
         <StackPanel Orientation="Horizontal" Margin="5"
                         HorizontalAlignment="Left"
@@ -22,6 +22,7 @@
         <StackPanel Orientation="Horizontal" Margin="5"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Top">
+            <Button x:Name="minimazebutton" Content="0" Style="{DynamicResource CaptionButtonStyleKey}" Foreground="White" FontSize="18" Click="minimazebutton_Click" />
             <Button x:Name="closebutton" Content="r" Style="{DynamicResource CaptionButtonStyleKey}" Foreground="White" FontSize="18" Click="closebutton_Click" />
         </StackPanel>
         <StatusBar x:Name="statusbar" HorizontalAlignment="Left" Height="25" Margin="0,278,0,0" VerticalAlignment="Top" Width="438" Background="#FF2D85C1">
@@ -30,15 +31,17 @@
         </StatusBar>
         <Button x:Name="start_server" Content="サーバ開始" HorizontalAlignment="Left" Margin="353,50,0,0" VerticalAlignment="Top" Width="75" Height="23" Click="start_server_Click"/>
         <TextBox x:Name="port_textbox" HorizontalAlignment="Left" Height="23" Margin="228,50,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Text="1000" VerticalContentAlignment="Center"/>
-        <Label x:Name="label1" Content="ポート番号" HorizontalAlignment="Left" Margin="164,49,0,0" VerticalAlignment="Top" Width="64" Foreground="White"/>
-        <Label x:Name="label" Content="CPU使用率" HorizontalAlignment="Left" Margin="5,89,0,0" VerticalAlignment="Top" Foreground="White"/>
-        <Label x:Name="CPU_label" Content="0%" HorizontalAlignment="Left" Margin="101,89,0,0" VerticalAlignment="Top" Width="46" Foreground="#FFF9FF73" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
-        <Label x:Name="label2" Content="メモリ使用量" HorizontalAlignment="Left" Margin="5,114,0,0" VerticalAlignment="Top" Foreground="White"/>
-        <Label x:Name="mem_label" Content="0MB" HorizontalAlignment="Left" Margin="80,114,0,0" VerticalAlignment="Top" Width="67" Foreground="#FF9CFF8C" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
-        <Label x:Name="label3" Content="最大物理メモリ" HorizontalAlignment="Left" Margin="197,114,0,0" VerticalAlignment="Top" Width="90" Foreground="White"/>
-        <Label x:Name="max_memlabel" Content="0MB" HorizontalAlignment="Left" Margin="281,114,0,0" VerticalAlignment="Top" Width="67" HorizontalContentAlignment="Right" Foreground="#FF73D3FF"/>
-        <Label x:Name="client_label_name" Content="接続クライアント" HorizontalAlignment="Left" Margin="10,185,0,0" VerticalAlignment="Top" Width="218" Height="33" Foreground="White" FontSize="16"/>
-        <Label x:Name="client_label" Content="クライアントなし" HorizontalAlignment="Left" Margin="10,218,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.985,0.893" Width="177" Height="33" Foreground="#FFFF7B7B" FontSize="16"/>
+        <Label x:Name="label1" Content="ポート番号" HorizontalAlignment="Left" Margin="164,50,0,0" VerticalAlignment="Top" Width="64" Foreground="White" Height="23"/>
+        <Label x:Name="label" Content="CPU使用率" HorizontalAlignment="Left" Margin="5,103,0,0" VerticalAlignment="Top" Foreground="White"/>
+        <Label x:Name="CPU_label" Content="0%" HorizontalAlignment="Left" Margin="103,103,0,0" VerticalAlignment="Top" Width="46" Foreground="#FFF9FF73" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
+        <Label x:Name="label2" Content="メモリ使用量" HorizontalAlignment="Left" Margin="5,134,0,0" VerticalAlignment="Top" Foreground="White"/>
+        <Label x:Name="mem_label" Content="0MB" HorizontalAlignment="Left" Margin="82,134,0,0" VerticalAlignment="Top" Width="67" Foreground="#FF9CFF8C" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
+        <Label x:Name="label3" Content="最大物理メモリ" HorizontalAlignment="Left" Margin="197,134,0,0" VerticalAlignment="Top" Width="90" Foreground="White"/>
+        <Label x:Name="max_memlabel" Content="0MB" HorizontalAlignment="Left" Margin="281,134,0,0" VerticalAlignment="Top" Width="67" HorizontalContentAlignment="Right" Foreground="#FF73D3FF"/>
+        <Label x:Name="client_label_name" Content="接続クライアント" HorizontalAlignment="Left" Margin="5,185,0,0" VerticalAlignment="Top" Width="218" Height="33" Foreground="White" FontSize="16"/>
+        <Label x:Name="client_label" Content="クライアントなし" HorizontalAlignment="Left" Margin="5,218,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.985,0.893" Width="177" Height="33" Foreground="#FFFF7B7B" FontSize="16"/>
         <Button x:Name="disconnect_button" Content="切断" HorizontalAlignment="Left" Margin="187,218,0,0" VerticalAlignment="Top" Width="100" Height="33" IsEnabled="False" Click="disconnect_button_Click"/>
+        <TextBox x:Name="password_textbox" HorizontalAlignment="Left" Height="23" Margin="228,79,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" VerticalContentAlignment="Center" />
+        <Label x:Name="label4" Content="パスワード" HorizontalAlignment="Left" Margin="164,79,0,0" VerticalAlignment="Top" Foreground="White" Height="23" VerticalContentAlignment="Center"/>
     </Grid>
 </Window>

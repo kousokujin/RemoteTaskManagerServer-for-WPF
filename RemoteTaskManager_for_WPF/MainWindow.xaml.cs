@@ -26,6 +26,7 @@ namespace RemoteTaskManager_for_WPF
         bool tick_switch = false;
 
         int port = 0;
+        string password = "";
 
         private async void runlisten() //listenを非同期で開始するメソッド
         {
@@ -44,24 +45,64 @@ namespace RemoteTaskManager_for_WPF
                 );
 
             tcp.listen();
+
+            /*
             string str;
             str = string.Format("{0},{1},0", per.cpu_count(), per.max_mem());
             System.Console.WriteLine(str);
 
             tcp.send(str);
 
+            */
+
             bool ok = false;
 
             while (!ok)
             {
-                if (tcp.recive() == "OK")
-                {
-                    ok = true;
-                    tcp.connection = true;  //tcp.connectionを違うインスタンスからいじるのはよくない気がする、どうにかしたいね
-                    System.Console.WriteLine("準備完了");
+                string tcp_str = tcp.recive();
+                if (tcp_str != "0") {
+                    if (tcp_str == password)
+                    {
+                        ok = true;
+                        tcp.connection = true;  //tcp.connectionを違うインスタンスからいじるのはよくない気がする、どうにかしたいね
+                        System.Console.WriteLine("準備完了");
+
+                        status_label.Dispatcher.BeginInvoke(
+                              new Action(() =>
+                              {
+                                status_label.Content = "接続完了";
+                                statusbar.Background = getBrushColor(104, 33, 122, 255);
+                                BorderBrush = getBrushColor(104, 33, 122, 255);
+                                client_label.Content = tcp.get_client_IP();
+                                client_label.Foreground = getBrushColor(45, 133, 193, 255);
+                                })
+                        );
+
+                        string str;
+                        str = string.Format("{0},{1},0", per.cpu_count(), per.max_mem());
+                        System.Console.WriteLine(str);
+
+                        tcp.send(str);
+                    }
+                    else //パスワード間違えるとだんだんCPU使用率が上がっていく
+                    {
+                        tcp.send("password_error");
+                        
+                        tcp.disconnection();
+
+                        tcp = new tcp_conection("0,0,0,0", port);
+
+                        this.Dispatcher.BeginInvoke(
+                            new Action(() =>
+                            {
+                                listen();
+                            })
+                            );
+                    }
                 }
             }
 
+            /*
             status_label.Dispatcher.BeginInvoke(
                     new Action(() =>
                     {
@@ -72,12 +113,15 @@ namespace RemoteTaskManager_for_WPF
                         client_label.Foreground = getBrushColor(45,133,193,255);
                     })
                 );
+                */
         }
 
         private void tick()
         {
             while(tick_switch)
             {
+                System.Console.WriteLine("Tick");
+
                 int mem = per.get_use_mem();
                 int cpu = per.get_all_cpu();
 
@@ -93,12 +137,13 @@ namespace RemoteTaskManager_for_WPF
                 {
                     if (tcp.connection) //クライアントが接続していたら
                     {
+                        System.Console.WriteLine("sendsend!!!");
                         string sendstr;
                         //tcp.send(sendstr);
                         //System.Console.WriteLine("send:{0}",sendstr);
 
                         sendstr = string.Format("{0},{1}", mem, cpu);
-                        //sendstr = string.Format("{0},{1}", mem, 90);
+                        //sendstr = string.Format("{0},{1}", 4000, 90);
                         for (int i = 0; i < per.cpu_count(); i++)
                         {
                             string str = string.Format(",{0}", per.get_thread_cpu(i));
@@ -208,6 +253,7 @@ namespace RemoteTaskManager_for_WPF
             }
             */
 
+            password = password_textbox.Text;
             port = int.Parse(port_textbox.Text);    //数字以外の数が入ってきたら例外になるので例外処理書かないと
             tcp = new tcp_conection("0,0,0,0", port);   //サーバ側なので第一引数はどうでもいい
             status_label.Content = "サーバ待機";
@@ -227,6 +273,11 @@ namespace RemoteTaskManager_for_WPF
         private void disconnect_button_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void minimazebutton_Click(object sender, RoutedEventArgs e)
+        {
+            this.WindowState = WindowState.Minimized;
         }
     }
 }
